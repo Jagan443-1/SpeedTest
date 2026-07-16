@@ -1,32 +1,47 @@
-# React + TypeScript + Vite
+# SpeedTest
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A browser-based internet speed test with a digital meter UI, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+Measures download speed, upload speed, ping latency, and jitter using a Cloudflare Worker API backend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Digital meter display with 30-segment color-coded bar
+- Light/dark/system theme toggle with CSS variables
+- 10-second download and upload tests with 8 parallel connections
+- 20-sample ping measurement with jitter calculation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the Oxlint configuration
+- **Frontend**: React 19, TypeScript 6, Vite 8
+- **Backend**: Cloudflare Worker (download, upload, ping endpoints)
+- **Hosting**: Cloudflare Pages (frontend), Cloudflare Workers (API)
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Development
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Deployment
+
+**Frontend** (Cloudflare Pages):
+
+```bash
+npm run build
+wrangler pages deploy dist --project-name speedtest
+```
+
+**API Worker** (Cloudflare Workers):
+
+```bash
+wrangler deploy --config server/wrangler.json
+```
+
+> **Note**: Do not use `wrangler deploy` without `--config server/wrangler.json` — the auto-generated `dist/wrangler.json` from Pages deploys will intercept it.
+
+## URLs
+
+- Frontend: https://speedtest-3ws.pages.dev
+- API: https://speed-api.livid.workers.dev
