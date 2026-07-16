@@ -21,17 +21,15 @@ export type ProgressCallback = (
 
 // 100MB test file - must support CORS and range requests
 const DOWNLOAD_URL =
-  "https://speedtest-t26s.onrender.com/download";
+  "https://speed-api.livid.workers.dev/download";
 
 // Ping endpoints - small files with CORS
 const PING_URLS = [
-  "https://speedtest-t26s.onrender.com/ping",
-  "https://www.google.com/favicon.ico",
-  "https://github.com/favicon.ico",
+  "https://speed-api.livid.workers.dev/ping",
 ];
 
 // Upload endpoint - must accept POST with CORS
-const UPLOAD_URL = "https://speedtest-t26s.onrender.com/upload";
+const UPLOAD_URL = "https://speed-api.livid.workers.dev/upload";
 
 const DOWNLOAD_CONNECTIONS = 8;
 const TEST_DURATION_MS = 10000;
