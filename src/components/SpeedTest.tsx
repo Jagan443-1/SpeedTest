@@ -5,7 +5,12 @@ import {
   type TestPhase,
 } from "../utils/speedTest";
 
-export default function SpeedTest() {
+interface SpeedTestProps {
+  onSpeedChange: (speed: number) => void;
+  onActiveChange: (active: boolean) => void;
+}
+
+export default function SpeedTest({ onSpeedChange, onActiveChange }: SpeedTestProps) {
   const [phase, setPhase] = useState<TestPhase>("idle");
   const [currentSpeed, setCurrentSpeed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -17,23 +22,28 @@ export default function SpeedTest() {
       setPhase(_phase);
       if (speed > 0) {
         setCurrentSpeed(speed);
+        onSpeedChange(speed);
       }
     },
-    []
+    [onSpeedChange]
   );
 
   const startTest = async () => {
     if (isRunning) {
       abortRef.current = true;
       setIsRunning(false);
+      onActiveChange(false);
       setPhase("idle");
       setCurrentSpeed(0);
+      onSpeedChange(0);
       return;
     }
 
     abortRef.current = false;
     setIsRunning(true);
+    onActiveChange(true);
     setCurrentSpeed(0);
+    onSpeedChange(0);
 
     try {
       await runSpeedTest(handleProgress);
@@ -44,6 +54,7 @@ export default function SpeedTest() {
       setPhase("idle");
     } finally {
       setIsRunning(false);
+      onActiveChange(false);
     }
   };
 
