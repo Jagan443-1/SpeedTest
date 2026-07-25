@@ -58,12 +58,12 @@ export default function SpeedDisplay({
         <div className="dig-header">
           <span className="dig-dot" />
           <span className="dig-label">SPEED</span>
-          <span className="dig-label right">{unit}</span>
         </div>
 
         {/* Main digital readout */}
         <div className="dig-display">
           <span className="dig-num">{displayValue}</span>
+          <span className="dig-unit">{unit}</span>
         </div>
 
         {/* Segmented bar */}
