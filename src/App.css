@@ -109,11 +109,6 @@
   color: var(--text-secondary);
 }
 
-.dig-label.right {
-  margin-left: auto;
-  color: var(--text-dim);
-}
-
 /* Main number */
 .dig-display {
   display: flex;
@@ -132,8 +127,21 @@
   font-family: "SF Mono", "Consolas", "Courier New", monospace;
 }
 
+.dig-unit {
+  font-size: clamp(1.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--text-secondary);
+  align-self: baseline;
+  margin-left: 0.3em;
+  font-family: "SF Mono", "Consolas", "Courier New", monospace;
+}
+
 .speed-display.active .dig-num {
   text-shadow: 0 0 30px var(--accent);
+}
+
+[data-theme="light"] .speed-display.active .dig-num {
+  text-shadow: none;
 }
 
 /* Segmented bar */
