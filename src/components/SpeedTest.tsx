@@ -1,16 +1,13 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import SpeedDisplay from "./SpeedDisplay";
-import Results from "./Results";
 import {
   runSpeedTest,
-  type SpeedResult,
   type TestPhase,
 } from "../utils/speedTest";
 
 export default function SpeedTest() {
   const [phase, setPhase] = useState<TestPhase>("idle");
   const [currentSpeed, setCurrentSpeed] = useState(0);
-  const [result, setResult] = useState<SpeedResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const abortRef = useRef(false);
 
@@ -36,13 +33,11 @@ export default function SpeedTest() {
 
     abortRef.current = false;
     setIsRunning(true);
-    setResult(null);
     setCurrentSpeed(0);
 
     try {
-      const final = await runSpeedTest(handleProgress);
+      await runSpeedTest(handleProgress);
       if (!abortRef.current) {
-        setResult(final);
         setPhase("done");
       }
     } catch {
@@ -68,15 +63,6 @@ export default function SpeedTest() {
         isActive={isRunning}
         phase={phase}
       />
-
-      {phase === "done" && result && (
-        <Results
-          ping={result.ping}
-          download={result.download}
-          upload={result.upload}
-          jitter={result.jitter}
-        />
-      )}
 
       <button
         className={`restart-btn ${isRunning ? "running" : ""}`}

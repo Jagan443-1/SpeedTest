@@ -6,28 +6,54 @@ interface SpeedDisplayProps {
   phase: TestPhase;
 }
 
-const PHASE_LABELS: Record<string, string> = {
-  ping: "PING",
-  download: "DOWNLOAD",
-  upload: "UPLOAD",
-  idle: "",
-  done: "",
-};
-
-const MAX_SPEED = 500;
+const MBPS_MAX = 500;
+const GBPS_MAX = 1;
+const KBPS_MAX = 500;
 const BARS = 30;
+
+const KBPS_SCALE = ["0", "100", "200", "300", "400", "500+"];
+const MBPS_SCALE = ["0", "100", "200", "300", "400", "500+"];
+const GBPS_SCALE = ["0", "0.2", "0.4", "0.6", "0.8", "1+"];
 
 export default function SpeedDisplay({
   value,
   isActive,
   phase,
 }: SpeedDisplayProps) {
-  const displayValue =
-    value < 10 ? value.toFixed(1) : value < 100 ? value.toFixed(1) : Math.round(value);
+  let speed: number;
+  let maxSpeed: number;
+  let unit: string;
+  let scale: string[];
 
-  const fillRatio = Math.min(value / MAX_SPEED, 1);
+  if (value >= 1024) {
+    speed = value / 1024;
+    maxSpeed = GBPS_MAX;
+    unit = "Gbps";
+    scale = GBPS_SCALE;
+  } else if (value >= 1) {
+    speed = value;
+    maxSpeed = MBPS_MAX;
+    unit = "Mbps";
+    scale = MBPS_SCALE;
+  } else {
+    speed = value * 1024;
+    maxSpeed = KBPS_MAX;
+    unit = "Kbps";
+    scale = KBPS_SCALE;
+  }
+
+  const capped = Math.min(speed, maxSpeed);
+  const displayValue =
+    speed >= maxSpeed
+      ? scale[5]
+      : speed < 10
+        ? speed.toFixed(1)
+        : speed < 100
+          ? speed.toFixed(1)
+          : Math.round(speed).toString();
+
+  const fillRatio = Math.min(capped / maxSpeed, 1);
   const activeBars = Math.round(fillRatio * BARS);
-  const label = PHASE_LABELS[phase] ?? "";
 
   return (
     <div className={`speed-display ${isActive ? "active" : ""}`}>
@@ -36,7 +62,7 @@ export default function SpeedDisplay({
         <div className="dig-header">
           <span className="dig-dot" />
           <span className="dig-label">SPEED</span>
-          <span className="dig-label right">Mbps</span>
+          <span className="dig-label right">{unit}</span>
         </div>
 
         {/* Main digital readout */}
@@ -70,27 +96,9 @@ export default function SpeedDisplay({
 
         {/* Scale row */}
         <div className="dig-scale">
-          <span>0</span>
-          <span>100</span>
-          <span>200</span>
-          <span>300</span>
-          <span>400</span>
-          <span>500</span>
-        </div>
-
-        {/* Bottom row */}
-        <div className="dig-footer">
-          <div className="dig-phase-box">
-            {label ? (
-              <span className="dig-phase">{label}</span>
-            ) : (
-              <span className="dig-phase off">READY</span>
-            )}
-          </div>
-          <div className="dig-peak">
-            <span className="dig-peak-label">PEAK</span>
-            <span className="dig-peak-val">{displayValue}</span>
-          </div>
+          {scale.map((s) => (
+            <span key={s}>{s}</span>
+          ))}
         </div>
       </div>
     </div>
