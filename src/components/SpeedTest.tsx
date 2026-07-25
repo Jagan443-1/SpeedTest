@@ -61,7 +61,6 @@ export default function SpeedTest() {
       <SpeedDisplay
         value={currentSpeed}
         isActive={isRunning}
-        phase={phase}
       />
 
       <button

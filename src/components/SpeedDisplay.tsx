@@ -1,9 +1,6 @@
-import type { TestPhase } from "../utils/speedTest";
-
 interface SpeedDisplayProps {
   value: number;
   isActive: boolean;
-  phase: TestPhase;
 }
 
 const MBPS_MAX = 500;
@@ -18,7 +15,6 @@ const GBPS_SCALE = ["0", "0.2", "0.4", "0.6", "0.8", "1+"];
 export default function SpeedDisplay({
   value,
   isActive,
-  phase,
 }: SpeedDisplayProps) {
   let speed: number;
   let maxSpeed: number;
